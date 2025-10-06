@@ -91,10 +91,7 @@
                 "title": "Configura la connettività del dispositivo",
                 "description": "Configura eventuali dettagli del dispositivo {for_device} vuoti (se presenti) per consentire a LocalTuya di connettersi al dispositivo.",
                 "data": {
-                    "friendly_name": "Nome",
-                    "host": "Host",
-                    "device_id": "ID del dispositivo",
-                    "device_node_id": "Node ID del dispositivo (sub-device)",
+                    "friendly_name": "Nome dispositivo",
                     "host": "Indirizzo IP",
                     "device_id": "ID dispositivo",
                     "local_key": "Chiave locale",
@@ -106,6 +103,7 @@
                     "add_entities": "Aggiungi nuove entità",
                     "manual_dps_strings": "(Opzionale) DPS manuali, se non rilevati automaticamente (separati da virgole)",
                     "reset_dpids": "(Opzionale) DPID da inviare nel comando RESET, se il dispositivo non risponde alle richieste di stato dopo l'accensione (separati da virgole)",
+                    "device_sleep_time": "(Optional) Device sleep time in seconds: If the device reports its state, then it goes into sleep",
                     "export_config": "Salva configurazione entità come modello"
                 }
             },
@@ -154,29 +152,31 @@
                     "positioning_mode": "Positioning mode",
                     "current_position_dp": "Current Position (for *position* mode only)",
                     "set_position_dp": "Set Position (for *position* mode only)",
+                    "stop_switch_dp": "(Optional) Stop switch (if the cover has continue command?)",
                     "position_inverted": "Invert 0-100 position (for *position* mode only)",
                     "span_time": "Full opening time, in secs. (for *timed* mode only)",
                     "unit_of_measurement": "(Optional) Unit of Measurement",
                     "device_class": "(Optional) Device Class",
                     "state_class": "(Optional) State Class",
                     "scaling": "(Optional) Scaling Factor",
-                    "state_on": "On Value",
+                    "state_on": "On Value (optionally comma-separated)",
                     "state_off": "Off Value",
                     "powergo_dp": "Power DP (usually 25 or 2)",
                     "idle_status_value": "Idle Status (comma-separated)",
-                    "returning_status_value": "Returning Status",
+                    "returning_status_value": "Returning Status (comma-separated)",
                     "docked_status_value": "Docked Status (comma-separated)",
                     "fault_dp": "Fault DP (usually 11)",
                     "battery_dp": "Battery status DP (usually 14)",
-                    "mode_dp": "Mode DP (usually 27)",
+                    "mode_dp": "Mode DP",
                     "modes": "Modes list",
                     "return_mode": "Return home mode",
-                    "fan_speed_dp": "Fan speeds DP (usually 30)",
+                    "fan_speed_dp": "(Optional) Fan speeds DP",
                     "fan_speeds": "Fan speeds list (comma-separated)",
                     "clean_time_dp": "Clean Time DP (usually 33)",
                     "clean_area_dp": "Clean Area DP (usually 32)",
                     "clean_record_dp": "Clean Record DP (usually 34)",
                     "locate_dp": "Locate DP (usually 31)",
+                    "pause_dp":"Pause DP",
                     "paused_state": "Pause state (pause, paused, etc)",
                     "stop_status": "Stop status",
                     "brightness": "Brightness (only for white color)",
@@ -191,7 +191,7 @@
                     "music_mode": "Music mode available?",
                     "scene": "Scene",
                     "scene_values": "(Optional) Scene values",
-                    "select_options": "Valid entries",
+                    "select_options": "Select options values",
                     "fan_speed_control": "Fan Speed Control DP",
                     "fan_oscillating_control": "Fan Oscillating Control DP",
                     "fan_speed_min": "minimum fan speed integer",
@@ -216,6 +216,7 @@
                     "hvac_action_set": "(Optional) HVAC Actions",
                     "preset_dp": "(Optional) Presets DP",
                     "preset_set": "(Optional) Presets",
+                    "fan_speed_list": "(Optional) Fan supported speeds, separate entries by comma ','",
                     "eco_dp": "(Optional) Eco DP",
                     "eco_value": "(Optional) Eco value",
                     "heuristic_action": "(Optional) Enable heuristic action",
@@ -226,12 +227,15 @@
                     "step_size": "Minimum increment between numbers",
                     "is_passive_entity": "Passive entity? (requires integration to send initialisation value)",
                     "entity_category": "Show the entity in this category",
-                    "humidifier_available_modes": "(Optional) Avaliable modes in device, separate entries by comma ','",
+                    "humidifier_available_modes": "(Optional) Available modes in the device",
                     "humidifier_current_humidity_dp": "(Optional) Current Humidity DP",
                     "humidifier_mode_dp": "(Optional) Set mode DP",
                     "humidifier_set_humidity_dp": "(Optional) Set Humidity DP",
                     "min_humidity": "Set the minimum supported humidity",
-                    "max_humidity": "Set the maximum supported humidity"
+                    "max_humidity": "Set the maximum supported humidity",
+                    "alarm_supported_states": "States supported by the device",
+                    "receive_dp":"Receiving signals DP. (default is 202)",
+                    "key_study_dp":"(Optional) Key Study DP (usually 7)"
                 },
                 "data_description": {
                     "hvac_mode_set":"Each line represents [ hvac_mode: device_value ] [Supported HVAC Modes](https://developers.home-assistant.io/docs/core/entity/climate/#hvac-modes)",
@@ -239,32 +243,10 @@
                     "preset_set":"Each line represents [ device_value: friendly name ]",
                     "scene_values":"Each line represents [ device_value: friendly name ]",
                     "select_options":"Each line represents [ device_value: friendly name ]",
-                    "device_class": "Find out more about [Device Classes](https://www.home-assistant.io/docs/configuration/customizing-devices/#device-class)",
+                    "alarm_supported_states":"Each line represents [ supported state: device value ] [Supported States](https://developers.home-assistant.io/docs/core/entity/alarm-control-panel/#states)",
+                    "humidifier_available_modes":"Each line represents [ device_value: friendly name ]",
+                    "device_class": "Find out more about [Device Classes](https://www.home-assistant.io/integrations/homeassistant/#device-class)",
                     "state_class": "Find out more about [State Classes](https://developers.home-assistant.io/docs/core/entity/sensor/#available-state-classes)"
-                }
-            }
-        }
-    },
-    "services": {
-        "reload": {
-            "name": "Reload",
-            "description": "Reload localtuya and reconnect to all devices."
-        },
-        "set_dp": {
-            "name": "Set datapoint",
-            "description": "Change the value of a datapoint (DP)",
-            "fields": {
-                "device_id": {
-                    "name": "Device ID",
-                    "description": "Device ID of device to change datapoint value for"
-                },
-                "dp": {
-                    "name": "DP",
-                    "description": "Datapoint index"
-                },
-                "value": {
-                    "name": "Value",
-                    "description": "New value to set"
                 }
             }
         }

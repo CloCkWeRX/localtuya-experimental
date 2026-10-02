@@ -218,12 +218,8 @@ def flow_schema(dps):
         vol.Optional(CONF_SWING_HORIZONTAL_DP): col_to_select(dps, is_dps=True),
         vol.Optional(CONF_SWING_HORIZONTAL_MODES, default={}): ObjectSelector(),
         vol.Optional(CONF_FAN_SPEED_DP): col_to_select(dps, is_dps=True),
-<<<<<<< HEAD
-        vol.Optional(CONF_FAN_SPEED_LIST, default=FAN_SPEEDS_DEFAULT): str,
-        vol.Optional(CONF_HVAC_ADD_OFF, default=True): bool,
-=======
         vol.Optional(CONF_FAN_SPEED_LIST, default=FAN_SPEEDS_DEFAULT): ObjectSelector(),
->>>>>>> 9593e804c3e2e111011f85677691e7f3cc9ab30c
+        vol.Optional(CONF_HVAC_ADD_OFF, default=True): bool,
         vol.Optional(CONF_TEMPERATURE_UNIT): col_to_select(SUPPORTED_TEMPERATURES),
         vol.Optional(CONF_HEURISTIC_ACTION): bool,
     }

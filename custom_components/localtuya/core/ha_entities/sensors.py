@@ -1215,7 +1215,7 @@ SENSORS: dict[str, tuple[LocalTuyaEntity, ...]] = {
         ## PHASE X Are probably encrypted values. since it duplicated it probably raw dict data.
         LocalTuyaEntity(
             id=DPCode.PHASE_A,
-            name="Phase C Current",
+            name="Phase A",
             entity_category=EntityCategory.DIAGNOSTIC,
         ),
         LocalTuyaEntity(
@@ -1598,12 +1598,14 @@ SENSORS: dict[str, tuple[LocalTuyaEntity, ...]] = {
             name="Temperature",
             device_class=SensorDeviceClass.TEMPERATURE,
             state_class=SensorStateClass.MEASUREMENT,
+            custom_configs=localtuya_sensor(UnitOfTemperature.CELSIUS),
         ),
         LocalTuyaEntity(
             id=DPCode.HUMIDITY_INDOOR,
             name="Humidity",
             device_class=SensorDeviceClass.HUMIDITY,
             state_class=SensorStateClass.MEASUREMENT,
+            custom_configs=localtuya_sensor(PERCENTAGE),
         ),
         LocalTuyaEntity(
             id=DPCode.COUNTDOWN_LEFT,
@@ -1860,7 +1862,7 @@ SENSORS: dict[str, tuple[LocalTuyaEntity, ...]] = {
             id=DPCode.LIQUID_DEPTH,
             name="Depth",
             icon="mdi:altimeter",
-            custom_configs=localtuya_sensor(UnitOfLength.METERS, 1),
+            custom_configs=localtuya_sensor(UnitOfLength.METERS, 0.01),
         ),
         LocalTuyaEntity(
             id=DPCode.LIQUID_LEVEL_PERCENT,
